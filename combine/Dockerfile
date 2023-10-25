@@ -31,6 +31,9 @@ COPY combine/combine.sql /tmp/combine.sql
 COPY combine/combine_db_prepare.sh /tmp/combine_db_prepare.sh
 COPY mysql/root.my.cnf /etc/.my.cnf
 
+# Work-around for error in mongoengine setup command: use_2to3 is invalid.
+RUN pip install --upgrade pip setuptools==57.5.0
+
 # install python dependencies
 RUN cd /opt/combine \
  && pip install -r requirements.txt
@@ -51,6 +54,6 @@ RUN pip install git+https://github.com/MI-DPLA/es2csv.git@python3
 
 # install mongo tools
 RUN apt-key adv --keyserver hkp://keyserver.ubuntu.com:80 --recv E52529D4 \
-  && echo "deb [ arch=amd64 ] https://repo.mongodb.org/apt/ubuntu bionic/mongodb-org/4.0 multiverse" | tee /etc/apt/sources.list.d/mongodb-org-4.0.list \
+  && echo "deb [ arch=amd64 trusted=yes ] https://repo.mongodb.org/apt/ubuntu bionic/mongodb-org/4.0 multiverse" | tee /etc/apt/sources.list.d/mongodb-org-4.0.list \
   && apt-get update \
   && apt-get install -y mongodb-org-tools

@@ -20,7 +20,8 @@ RUN apt-get update \
  && mkdir -p /usr/share/man/man1 \
  && apt-get install -y curl unzip lsof wget unzip maven \
     python3 python3-setuptools python3-pip \
- && ln -s /usr/bin/python3 /usr/bin/python \
+ # REMOVE comment character on following line when building for jdk-slim-buster; I had to comment this out for jdk-buster (different than jdk-slim-buster)
+ #&& ln -s /usr/bin/python3 /usr/bin/python \
  && pip3 install py4j \
  && apt-get clean \
  && rm -rf /var/lib/apt/lists/*
@@ -48,3 +49,6 @@ ENV SPARK_HOME=/opt/spark
 
 # Copy configurations
 COPY spark-defaults.conf /opt/spark/conf/spark-defaults.conf
+
+# Use more recent jar that uses namespace of com/opencsv/ (older jar uses namespace of au/com/bytecode/opencsv/ (which causes error during a harvest of all records (no sets): in Py4JJavaError An error occurred while calling o324.save.  : java.lang.NoClassDefFoundError: com/opencsv/CSVWriter..)
+COPY opencsv-3.8.jar /opt/spark/jars/opencsv-2.3.jar
