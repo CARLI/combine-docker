@@ -248,6 +248,9 @@ services:
     image: nginx:latest
     container_name: nginx
     volumes:
+#     # CARLI added:
+#     - ./nginx/htpasswd:/.htpasswd
+
       - ./nginx/nginx.conf:/etc/nginx/nginx.conf
       - ./nginx/mime.types:/etc/nginx/mime.types
       - ./nginx/error.log:/etc/nginx/error_log.log
@@ -259,8 +262,10 @@ services:
 #      - ./certbot/conf:/etc/letsencrypt
 #      - ./certbot/www:/var/www/certbot
     ports:
-      - "127.0.0.1:80:80"
-      - "127.0.0.1:443:443"
+#     - "127.0.0.1:80:80"
+#     - "127.0.0.1:443:443"
+      - "0.0.0.0:80:80"
+      - "0.0.0.0:443:443"
     depends_on:
       - combine-django
       - combine-celery
